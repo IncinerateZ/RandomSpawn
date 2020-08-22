@@ -1,0 +1,41 @@
+pos1:
+  x: 0.0
+  z: 0.0
+pos2:
+  x: 1.0
+  z: 1.0
+
+tp-request: "&6[RandomSpawn] Finding a safe random spot to tp."
+teleport: "&6[RandomSpawn] Teleporting...."
+not-found: "&4[RandomSpawn] No Suitable Space Found Within %checks% Checks!"
+unknown-args: "&4[RandomSpawn] Unknown Arguments!"
+no-permission: "&4[RandomSpawn] You do not have permission to use this command!"
+non-player: "&4[RandomSpawn] Only players can run this command!"
+in-cooldown: "&4[RandomSpawn] You can use this command in %time%!"
+
+#Cooldown time in milliseconds * for /rtp only *
+cooldown: 5000
+
+#tries is how many random blocks are chosen that a random tp request will complete.
+#distance is how many more checks per tries. every distance will add 4 more checks from a min of 4. Checks = distance * 4 * tries
+max-distance: 10
+max-tries: 10
+#Force-find overrides max-distance and max-tries
+force-find: true
+#If random tp returns false, forces a random tp with a glass block under the player
+force-tp: true
+#max-check-override overrides force find once tries has exceeded config max
+max-check-override: 10000
+
+#World name where random spawn takes place, write None for current world.
+world: world
+
+##Banned Blocks
+enable-blacklist: true
+##Use Capitalized Block Namespaced IDs
+blocks: ["LAVA","STATIONARY_LAVA","WATER","STATIONARY_WATER","CACTUS","DIAMOND_BLOCK"]
+
+##Enable-BedSpawn
+bed-spawn : true
+##OnDeath
+on-death: true
