@@ -43,10 +43,14 @@ public class SearchRunnable implements Runnable {
         pLoc = p.getLocation();
     }
 
-    private void sendResult(Player p, Location loc, boolean loader, boolean forceTp) {
+    private void sendResult(Player p, Location loc, boolean loader, boolean forceTp, boolean found) {
         if(!loader) {
-            Location l = world.getHighestBlockAt(loc).getLocation();
-            loc.setY(l.getY());
+            if(found) {
+                Location l = world.getHighestBlockAt(loc).getLocation();
+                loc.setY(l.getY());
+            } else {
+                if(plugin.MCVERSION.equalsIgnoreCase("1.16")) loc.add(0, -1, 0);
+            }
         } else {
             loadCount++;
         }
@@ -114,12 +118,12 @@ public class SearchRunnable implements Runnable {
             Location center = plugin.getRandomLocation(world);
             RLoc c = new RLoc(center);
             Pair pair = new Pair(c.getLoc().getBlockX(), c.getLoc().getBlockY());
-            sendResult(p, center, true, false);
+            sendResult(p, center, true, false, false);
             sendEffect(p, new PotionEffect(PotionEffectType.LEVITATION, 20, 255));
             if(!visited.contains(pair)) {
                 if (plugin.isSafeLocation(center)) {
                     p.sendMessage(ChatUtils.colorFormat(this.plugin.getConfig().getString("teleport")));
-                    sendResult(p, center, false, false);
+                    sendResult(p, center, false, false, true);
                     return;
                 } else {
                     Queue<RLoc> q = new Queue<>();
@@ -129,7 +133,7 @@ public class SearchRunnable implements Runnable {
                         Location res = bfsSearch(q);
                         if (res != null) {
                             p.sendMessage(ChatUtils.colorFormat(this.plugin.getConfig().getString("teleport")));
-                            sendResult(p, res, false, false);
+                            sendResult(p, res, false, false, true);
                             return;
                         }
                     } catch (InterruptedException e) {
@@ -143,11 +147,11 @@ public class SearchRunnable implements Runnable {
         }
         stopped = true;
         if(!forceTp) {
-            sendResult(p, pLoc, false, false);
+            sendResult(p, pLoc, false, false, false);
             p.sendMessage(ChatUtils.colorFormat(this.plugin.getConfig().getString("not-found").replace("%checks%", "" + c)));
         } else {
             p.sendMessage(ChatUtils.colorFormat(this.plugin.getConfig().getString("teleport")));
-            sendResult(p, plugin.getRandomLocation(world), false, true);
+            sendResult(p, plugin.getRandomLocation(world), false, true, true);
         }
     }
 }
